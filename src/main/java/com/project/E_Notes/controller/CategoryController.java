@@ -7,12 +7,13 @@ import com.project.E_Notes.services.CategoryServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/categorys")
+@RequestMapping("/api/v1/category")
 public class CategoryController {
 
     private final CategoryServices categoryServices;
@@ -35,8 +36,8 @@ public class CategoryController {
         }
     }
 
-    // To get all categories
-    @GetMapping("/category")
+
+    @GetMapping("/")
     public ResponseEntity<?> getAllCategory() {
         List<Categorydto> categories = categoryServices.getAllCate();
 
@@ -62,4 +63,38 @@ public class CategoryController {
             return new ResponseEntity<>(categories, HttpStatus.OK);
         }
     }
+
+
+
+    //  THIS TO FIND CATEGORY USING ID.
+
+@GetMapping("/{id}")
+    public ResponseEntity<?> getCategoryById(@PathVariable Integer id){
+        // Using this object we fill all field of object
+        Categorydto categorydto = categoryServices.getCategoryById(id);
+        //if from the use of services  find data in dto object is empty.
+    if (ObjectUtils.isEmpty(categorydto)){
+        return new ResponseEntity<>("Category not found with ID=  "+id,HttpStatus.NOT_FOUND);
+    }
+    return new ResponseEntity<>(categorydto, HttpStatus.OK);
+    }
+
+
+         // delete the category
+
+   @DeleteMapping("/{id}")
+  public ResponseEntity<?>deleteCategory(@PathVariable Integer id) {
+      // use object is true.
+
+    boolean deleted = categoryServices.deletCategory(id);
+    if (deleted){
+        return new ResponseEntity<>("Category Delete Successfully",HttpStatus.OK);
+    }return new ResponseEntity<>("Category Not deleted or Id not found ",HttpStatus.INTERNAL_SERVER_ERROR);
+
+}
+
+
+
+
+
 }
