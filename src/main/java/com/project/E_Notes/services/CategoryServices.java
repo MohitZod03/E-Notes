@@ -13,4 +13,11 @@ public interface CategoryServices {
 
     // this is  from category response object of active category.
     List<CategoryResponse> getallActiveCategory();
+
+
+    // find the category by id
+    public Categorydto getCategoryById(Integer id);
+
+    // Deleted Category
+    public boolean deletCategory(Integer id);
 }

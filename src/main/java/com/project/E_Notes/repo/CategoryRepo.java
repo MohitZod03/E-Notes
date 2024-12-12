@@ -5,9 +5,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CategoryRepo extends JpaRepository<Category,Integer> {
-    // custom method for find with active category.
-    List<Category> findByIsActiveTrue();
+    // custom  method that already present in JPA.  for find with active category.
+    List<Category> findByIsActiveTrueAndIsDeletedFalse();
+
+
+    // THIS IS FIND CATEGORY BY ID IF DELETE IS FALSE METHOD. this is also present in jpa.
+    Optional<Category> findByIdAndIsDeletedFalse(Integer id);
+
+    // it is also present in jpa with some modification.
+    List<Category> findByIsDeletedFalse();
 }

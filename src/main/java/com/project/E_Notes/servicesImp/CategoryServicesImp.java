@@ -12,6 +12,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -28,6 +29,7 @@ public class CategoryServicesImp implements CategoryServices {
     @Autowired
     private ModelMapper mapper;
 
+                  // SAVE-CATEGORY
 
     @Override
     public Boolean saveCategory(Categorydto categorydto) {
@@ -63,9 +65,11 @@ public class CategoryServicesImp implements CategoryServices {
         return  true;
     }
 
+              // To get all categories if the isDeleted false.
+
     @Override
     public List<Categorydto> getAllCate() {
-       List<Category> categories = categoryRepo.findAll();
+       List<Category> categories = categoryRepo.findByIsDeletedFalse();
        // USE THE DTO OBJECT WITH STREAM API.//we never expose main entity/model in industry level
       List<Categorydto>  categorydto = categories.stream().map(category ->
               mapper.map(category, Categorydto.class)).toList();
@@ -73,14 +77,60 @@ public class CategoryServicesImp implements CategoryServices {
        return  categorydto;
     }
 
+                            // FIND ACTIVE-CATEGORY
 
     @Override
     public List<CategoryResponse> getallActiveCategory() {
         // in there first get data from category with custom method of repo.
-        List<Category> categories = categoryRepo.findByIsActiveTrue();
+        List<Category> categories = categoryRepo.findByIsActiveTrueAndIsDeletedFalse();
 
 List<CategoryResponse> categoryResponses = categories.stream()
         .map(category -> mapper.map(category, CategoryResponse.class)).toList();
         return categoryResponses;
     }
+
+
+                           // GET-CATEGORY-BY-ID
+
+    // this is to find category from db with id then pass data to dto object for showing.
+    @Override
+    public Categorydto getCategoryById(Integer id) {
+        // use here to find from option in categories with help of id
+
+        Optional<Category> findCategoryByID = categoryRepo.findByIdAndIsDeletedFalse(id);
+        // apply condition id if id found then.
+        if (findCategoryByID.isPresent()){
+            Category category = findCategoryByID.get();
+            // it is map data for view  from category to CategoryDto
+            return mapper.map(category, Categorydto.class);
+
+        }return null;
+    }
+
+
+                          // DELETE-CATEGORY
+
+    // WE FIND ID THEN TRUE THE isDeleted. NOT SHOW TO USER THEN.
+
+    @Override
+    public boolean deletCategory(Integer id) {
+
+        Optional<Category> findCategoryByID = categoryRepo.findById(id);
+        // apply condition id if id found then.
+        if (findCategoryByID.isPresent())
+        {
+            Category category = findCategoryByID.get();
+            // SET TRUE isDelete if find id.
+            category.setIsDeleted(true);
+            // save this
+            categoryRepo.save(category);
+            return true;
+        }
+        return false;
+
+    }
+
+
+
+
 }
