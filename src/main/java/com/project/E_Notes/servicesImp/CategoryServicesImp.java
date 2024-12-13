@@ -29,7 +29,7 @@ public class CategoryServicesImp implements CategoryServices {
     @Autowired
     private ModelMapper mapper;
 
-                  // SAVE-CATEGORY
+                  // SAVE-CATEGORY(get value from dto and pass value in category.)
 
     @Override
     public Boolean saveCategory(Categorydto categorydto) {
@@ -53,11 +53,24 @@ public class CategoryServicesImp implements CategoryServices {
 //        category.setIsActive(categorydto.getIsActive());
 
          // KNOW USE MAPPER CLASS FOR PROFESSIONAL OBJECT OF MAPPING WITH DTO
-// note - field name in both model is needed same.
+// note - field name in both model is needed same. automatically get value in category.
+
+
+
         Category category = mapper.map(categorydto, Category.class);
-        category.setIsDeleted(false);
-        category.setCreatedBy(1);
-        category.setCreatedDate(new Date());
+
+        // apply same with updated this category the & save .
+        // if not present already then save otherwise updated.
+        if (ObjectUtils.isEmpty(category.getId())){
+            category.setIsDeleted(false);
+            category.setCreatedBy(1);
+            category.setCreatedDate(new Date());
+        }else {
+            // this is for the updated if already exist.
+            updatedCategory(category);
+        }
+
+
         Category saveCategory = categoryRepo.save(category);
         if (ObjectUtils.isEmpty(saveCategory)){
             return false;
@@ -130,7 +143,28 @@ List<CategoryResponse> categoryResponses = categories.stream()
 
     }
 
+// write the code for the update the category.
+         //NOTE - save and update in one api. write "id"=value  needed.
 
+    public void updatedCategory(Category category){
+// first we find the category with help of id
+        Optional<Category> findById = categoryRepo.findById(category.getId());
+        // then create object of category some things set from backend.
+
+        if (findById.isPresent()){
+            // this object get value from db with help of id.
+
+            Category existCategory = findById.get();
+            category.setIsDeleted(existCategory.getIsDeleted());
+            category.setCreatedDate(existCategory.getCreatedDate());
+            category.setCreatedBy(existCategory.getCreatedBy());
+
+            category.setUpdatedId(1);
+            category.setUpdatedDate(new Date());
+
+
+        }
+    }
 
 
 }
