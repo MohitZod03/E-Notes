@@ -3,7 +3,9 @@ package com.project.E_Notes.controller;
 import com.project.E_Notes.dto.CategoryResponse;
 import com.project.E_Notes.dto.Categorydto;
 import com.project.E_Notes.entety.Category;
+import com.project.E_Notes.exceptionHandling.ResourcesNotFoundException;
 import com.project.E_Notes.services.CategoryServices;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
@@ -11,7 +13,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@Slf4j // this is for the logs in field.
 @RestController
 @RequestMapping("/api/v1/category")
 public class CategoryController {
@@ -36,9 +38,11 @@ public class CategoryController {
         }
     }
 
+                 // to get all the category.
 
     @GetMapping("/")
     public ResponseEntity<?> getAllCategory() {
+
         List<Categorydto> categories = categoryServices.getAllCate();
 
         // Using Spring's CollectionUtils to check for an empty list
@@ -69,14 +73,19 @@ public class CategoryController {
     //  THIS TO FIND CATEGORY USING ID.
 
 @GetMapping("/{id}")
-    public ResponseEntity<?> getCategoryById(@PathVariable Integer id){
-        // Using this object we fill all field of object
+    public ResponseEntity<?> getCategoryById(@PathVariable Integer id) throws Exception{
+        // Using this object we fill active all field of object
+
         Categorydto categorydto = categoryServices.getCategoryById(id);
         //if from the use of services  find data in dto object is empty.
-    if (ObjectUtils.isEmpty(categorydto)){
-        return new ResponseEntity<>("Category not found with ID=  "+id,HttpStatus.NOT_FOUND);
-    }
-    return new ResponseEntity<>(categorydto, HttpStatus.OK);
+        if (ObjectUtils.isEmpty(categorydto)){
+            return new ResponseEntity<>("Category not found with ID="+ id,HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(categorydto, HttpStatus.OK);
+
+    // first one catch not worked then second catch run.
+
+
     }
 
 

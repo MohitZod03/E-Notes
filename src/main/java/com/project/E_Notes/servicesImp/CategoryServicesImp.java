@@ -3,6 +3,7 @@ package com.project.E_Notes.servicesImp;
 import com.project.E_Notes.dto.CategoryResponse;
 import com.project.E_Notes.dto.Categorydto;
 import com.project.E_Notes.entety.Category;
+import com.project.E_Notes.exceptionHandling.ResourcesNotFoundException;
 import com.project.E_Notes.repo.CategoryRepo;
 import com.project.E_Notes.services.CategoryServices;
 import org.modelmapper.ModelMapper;
@@ -106,14 +107,16 @@ List<CategoryResponse> categoryResponses = categories.stream()
                            // GET-CATEGORY-BY-ID
 
     // this is to find category from db with id then pass data to dto object for showing.
-    @Override
-    public Categorydto getCategoryById(Integer id) {
-        // use here to find from option in categories with help of id
 
-        Optional<Category> findCategoryByID = categoryRepo.findByIdAndIsDeletedFalse(id);
+    @Override
+    public Categorydto getCategoryById(Integer id) throws ResourcesNotFoundException {
+        // use here to find from option in categories with help of id also handle exception.
+
+        Category category = categoryRepo.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(()-> new ResourcesNotFoundException("Category not found with this id"+id));
         // apply condition id if id found then.
-        if (findCategoryByID.isPresent()){
-            Category category = findCategoryByID.get();
+        if (!ObjectUtils.isEmpty(category)){
+
             // it is map data for view  from category to CategoryDto
             return mapper.map(category, Categorydto.class);
 
