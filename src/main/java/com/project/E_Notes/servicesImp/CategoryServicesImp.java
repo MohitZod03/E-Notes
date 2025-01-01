@@ -6,6 +6,7 @@ import com.project.E_Notes.entety.Category;
 import com.project.E_Notes.exceptionHandling.ResourcesNotFoundException;
 import com.project.E_Notes.repo.CategoryRepo;
 import com.project.E_Notes.services.CategoryServices;
+import com.project.E_Notes.util.Validation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,32 +31,16 @@ public class CategoryServicesImp implements CategoryServices {
     @Autowired
     private ModelMapper mapper;
 
+    @Autowired
+    private Validation validation;
+
                   // SAVE-CATEGORY(get value from dto and pass value in category.)
 
     @Override
     public Boolean saveCategory(Categorydto categorydto) {
-        // Set default values and save category
-//        category.setIsDeleted(false);
-//        category.setCreatedBy(1);
-//        category.setCreatedDate(new Date());
-//
-//        Category category1 = categoryRepo.save(category);
-//
-//        // Check if the category was saved successfully
-//        return !ObjectUtils.isEmpty(category1);
 
-
-           // DTO // now all this set using crated object but Know use the Mapper class for easy.
-
-//        Category category = new Category();
-//        category.setId(categorydto.getId());
-//        category.setName(categorydto.getName());
-//        category.setDescription(categorydto.getDescription());
-//        category.setIsActive(categorydto.getIsActive());
-
-         // KNOW USE MAPPER CLASS FOR PROFESSIONAL OBJECT OF MAPPING WITH DTO
-// note - field name in both model is needed same. automatically get value in category.
-
+            // Validation checker before post
+        validation.categoryValidation(categorydto);
 
 
         Category category = mapper.map(categorydto, Category.class);
@@ -97,6 +82,8 @@ public class CategoryServicesImp implements CategoryServices {
     public List<CategoryResponse> getallActiveCategory() {
         // in there first get data from category with custom method of repo.
         List<Category> categories = categoryRepo.findByIsActiveTrueAndIsDeletedFalse();
+
+// transfer  data from db dto responce object with help of category obj in CategoryRespon obj.
 
 List<CategoryResponse> categoryResponses = categories.stream()
         .map(category -> mapper.map(category, CategoryResponse.class)).toList();

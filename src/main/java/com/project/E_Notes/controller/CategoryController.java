@@ -27,6 +27,7 @@ public class CategoryController {
 
     // To save category
     @PostMapping("/save-category")
+    // to use response entity then show the status of api.
     public ResponseEntity<?> saveCategory(@RequestBody Categorydto categorydto) {
         Boolean saveCategory = categoryServices.saveCategory(categorydto);
 

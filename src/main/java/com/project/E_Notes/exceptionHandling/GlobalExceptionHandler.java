@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice // this is applied every api in aby package.
 public class GlobalExceptionHandler {
 
-    // global exception
+    // global exception  // if any kind of exception occur.
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception e){
         return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -29,6 +29,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> resourcesNotFoundException(Exception e){
         log.error("GlobalExceptionHandler :: handlerNotFoundException::",e.getMessage());
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<?> validationException(ValidationException e){
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 
