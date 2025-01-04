@@ -3,6 +3,7 @@ package com.project.E_Notes.servicesImp;
 import com.project.E_Notes.dto.CategoryResponse;
 import com.project.E_Notes.dto.Categorydto;
 import com.project.E_Notes.entety.Category;
+import com.project.E_Notes.exceptionHandling.ExistDataException;
 import com.project.E_Notes.exceptionHandling.ResourcesNotFoundException;
 import com.project.E_Notes.repo.CategoryRepo;
 import com.project.E_Notes.services.CategoryServices;
@@ -41,6 +42,13 @@ public class CategoryServicesImp implements CategoryServices {
 
             // Validation checker before post
         validation.categoryValidation(categorydto);
+
+        // check the exist category with same name if then proper exception.
+        Boolean exist= categoryRepo.existsByName(categorydto.getName());
+         if(exist)// if true or the category with same name exist
+         {
+                throw new ExistDataException("Category with name already exist ");
+         }
 
 
         Category category = mapper.map(categorydto, Category.class);

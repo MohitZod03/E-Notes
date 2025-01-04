@@ -2,23 +2,15 @@ package com.project.E_Notes.exceptionHandling;
 
 import java.util.Map;
 
-public class ValidationException extends RuntimeException
-{
+public class ValidationException extends RuntimeException {
+    private final Map<String, Object> error;
 
-    // create map object with key and value
-    Map<String, Object > error;
-
-    public ValidationException(Map<String,Object> error)
-    {
-        super("Validation Failed");
-        this.error =error;
-
+    public ValidationException(Map<String, Object> error) {
+        super("Validation Failed"); // Generic message
+        this.error = error;         // Detailed errors
     }
 
-    public Map<String, Object> getError()
-    {
+    public Map<String, Object> getError() {
         return error;
     }
-
-
 }

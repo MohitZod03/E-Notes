@@ -10,71 +10,44 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Component
-public class Validation
-{
+public class Validation {
 
-    public void categoryValidation(Categorydto categorydto)
-    {
+    public void categoryValidation(Categorydto categorydto) {
+        // Map to collect all validation errors
+        Map<String, Object> error = new LinkedHashMap<>();
 
-        // created the mapping object for show error.
-        Map<String,Object> error = new LinkedHashMap<>();
-
-        // if pass the black or empty category then validate.
-        if (ObjectUtils.isEmpty(categorydto))
-        {
-            throw new IllegalArgumentException("Category Object should me null or empty");
-        }
-        else
-        {
-
-// if name field is empty or null and length of name field.
-
-            if (ObjectUtils.isEmpty(categorydto.getName()))
-            {
-                error.put("name","name field is empty or null");
-            }else
-            {
-                if (categorydto.getName().length()<5)
-                {
-                    error.put("name","name length min 5");
-                }if (categorydto.getName().length()>100)
-            {
-                error.put("name","name length max 100");
-            }
-            }
-// Validation of the Description.
-
-            if (ObjectUtils.isEmpty(categorydto.getDescription()))
-            {
-
-                error.put("description","description field is empty or null");
-            }
-
-// validation for the isActive field.
-            if (ObjectUtils.isEmpty(categorydto.getIsActive()))
-            {
-                error.put("isActive","isActive field is empty or null");
-            }else
-            {
-
-                if(categorydto.getIsActive()!= Boolean.TRUE.booleanValue()
-                        && categorydto.getIsActive()!=Boolean.FALSE.booleanValue()){
-                    error.put("isActive","invalid value in isActive field");
-                }
-
-            }
-
-
+        // Check if the DTO itself is null
+        if (ObjectUtils.isEmpty(categorydto)) {
+            throw new IllegalArgumentException("Category object cannot be null or empty");
         }
 
-        if (!error.isEmpty())
-        {
+        // Validate the 'name' field
+        if (ObjectUtils.isEmpty(categorydto.getName())) {
+            error.put("name", "Name field is empty or null");
+        } else {
+            if (categorydto.getName().length() < 5) {
+                error.put("name", "Name length must be at least 5 characters");
+            }
+            if (categorydto.getName().length() > 100) {
+                error.put("name", "Name length must not exceed 100 characters");
+            }
+        }
+
+        // Validate the 'description' field
+        if (ObjectUtils.isEmpty(categorydto.getDescription())) {
+            error.put("description", "Description field is empty or null");
+        }
+
+        // Validate the 'isActive' field
+        if (ObjectUtils.isEmpty(categorydto.getIsActive())) {
+            error.put("isActive", "isActive field is empty or null");
+        } else if (categorydto.getIsActive() != Boolean.TRUE && categorydto.getIsActive() != Boolean.FALSE) {
+            error.put("isActive", "Invalid value in isActive field; must be true or false");
+        }
+
+        // If there are any errors, throw ValidationException
+        if (!error.isEmpty()) {
             throw new ValidationException(error);
         }
-
-
     }
-
-
-
 }
