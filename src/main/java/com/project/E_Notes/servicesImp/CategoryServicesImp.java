@@ -49,8 +49,8 @@ public class CategoryServicesImp implements CategoryServices {
         // if not present already then save otherwise updated.
         if (ObjectUtils.isEmpty(category.getId())){
             category.setIsDeleted(false);
-            category.setCreatedBy(1);
-            category.setCreatedDate(new Date());
+//            category.setCreatedBy(1);
+//            category.setCreatedDate(new Date());
         }else {
             // this is for the updated if already exist.
             updatedCategory(category);
@@ -149,8 +149,8 @@ List<CategoryResponse> categoryResponses = categories.stream()
             category.setCreatedDate(existCategory.getCreatedDate());
             category.setCreatedBy(existCategory.getCreatedBy());
 
-            category.setUpdatedId(1);
-            category.setUpdatedDate(new Date());
+//            category.setUpdatedId(1);
+//            category.setUpdatedDate(new Date());
 
 
         }
