@@ -5,6 +5,7 @@ import com.project.E_Notes.dto.Categorydto;
 import com.project.E_Notes.entety.Category;
 import com.project.E_Notes.exceptionHandling.ResourcesNotFoundException;
 import com.project.E_Notes.services.CategoryServices;
+import com.project.E_Notes.util.CommanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +34,11 @@ public class CategoryController {
 
         // Condition to check if the category was saved successfully
         if (saveCategory) {
-            return new ResponseEntity<>("Category saved successfully", HttpStatus.CREATED);
+           // return new ResponseEntity<>("Category saved successfully", HttpStatus.CREATED);
+            return CommanUtil.crateBuildResponceMassage("Category saved successfully",HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>("Category not saved", HttpStatus.INTERNAL_SERVER_ERROR);
+           // return new ResponseEntity<>("Category not saved", HttpStatus.INTERNAL_SERVER_ERROR);
+            return CommanUtil.crateErrorResponSeMassage("Category not saved",HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -50,7 +53,8 @@ public class CategoryController {
         if (CollectionUtils.isEmpty(categories)) {
             return ResponseEntity.noContent().build();
         } else {
-            return new ResponseEntity<>(categories, HttpStatus.OK);
+            //return new ResponseEntity<>(categories, HttpStatus.OK);
+            return CommanUtil.createBuildResponces(categories,HttpStatus.OK);
         }
     }
 
@@ -65,7 +69,9 @@ public class CategoryController {
         if (CollectionUtils.isEmpty(categories)) {
             return ResponseEntity.noContent().build();
         } else {
-            return new ResponseEntity<>(categories, HttpStatus.OK);
+            //return new ResponseEntity<>(categories, HttpStatus.OK);
+            return CommanUtil.createBuildResponces(categories,HttpStatus.OK);
+
         }
     }
 
@@ -80,9 +86,11 @@ public class CategoryController {
         Categorydto categorydto = categoryServices.getCategoryById(id);
         //if from the use of services  find data in dto object is empty.
         if (ObjectUtils.isEmpty(categorydto)){
-            return new ResponseEntity<>("Category not found with ID="+ id,HttpStatus.NOT_FOUND);
+           // return new ResponseEntity<>("Category not found with ID="+ id,HttpStatus.NOT_FOUND);
+            return CommanUtil.crateErrorResponSeMassage("Category not found with ID",HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(categorydto, HttpStatus.OK);
+       // return new ResponseEntity<>(categorydto, HttpStatus.OK);
+    return CommanUtil.createBuildResponces(categorydto,HttpStatus.OK);
 
     // first one catch not worked then second catch run.
 
@@ -98,9 +106,11 @@ public class CategoryController {
 
     boolean deleted = categoryServices.deletCategory(id);
     if (deleted){
-        return new ResponseEntity<>("Category Delete Successfully",HttpStatus.OK);
-    }return new ResponseEntity<>("Category Not deleted or Id not found ",HttpStatus.INTERNAL_SERVER_ERROR);
-
+       // return new ResponseEntity<>("Category Delete Successfully",HttpStatus.OK);
+        return CommanUtil.crateBuildResponceMassage("Category Delete Successfully",HttpStatus.OK);
+    }
+   // return new ResponseEntity<>("Category Not deleted or Id not found ",HttpStatus.INTERNAL_SERVER_ERROR);
+return CommanUtil.crateErrorResponSeMassage("Category Not deleted or Id not found",HttpStatus.INTERNAL_SERVER_ERROR);
 }
 
 
