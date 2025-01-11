@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.sql.Update;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -15,7 +14,7 @@ import java.util.Date;
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class BaseCategory { // compalcery to geive body.
+public abstract class BaseModel { // compalcery to geive body.
 
     @CreatedBy
     @Column(updatable = false)// by default true

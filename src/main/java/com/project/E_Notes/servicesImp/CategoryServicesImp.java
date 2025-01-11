@@ -108,7 +108,7 @@ List<CategoryResponse> categoryResponses = categories.stream()
         // use here to find from option in categories with help of id also handle exception.
 
         Category category = categoryRepo.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(()-> new ResourcesNotFoundException("Category not found with this id"+id));
+                .orElseThrow(()-> new ResourcesNotFoundException("Category not found with this id = "+id));
         // apply condition id if id found then.
         if (!ObjectUtils.isEmpty(category)){
 
