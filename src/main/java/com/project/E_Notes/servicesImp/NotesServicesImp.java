@@ -7,14 +7,13 @@ import com.project.E_Notes.exceptionHandling.ResourcesNotFoundException;
 import com.project.E_Notes.repo.CategoryRepo;
 import com.project.E_Notes.repo.NotesRepo;
 import com.project.E_Notes.services.NotesServices;
-import org.apache.catalina.mapper.Mapper;
+import com.project.E_Notes.util.Validation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class NotesServicesImp implements NotesServices {
@@ -29,8 +28,14 @@ public class NotesServicesImp implements NotesServices {
     @Autowired
     private CategoryRepo categoryRepo;
 
+    @Autowired
+    private Validation validation;
+
     @Override
     public Boolean saveNotes(NotesDto notesDto) throws Exception {
+
+        // this is validation on filed
+        validation.notesValidation(notesDto);
 
                 // Category Exist Or not Check Validation.
         checkCategoryExist(notesDto.getCategory());

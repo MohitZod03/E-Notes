@@ -71,4 +71,17 @@ public class GlobalExceptionHandler {
         //return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         return CommanUtil.crateErrorResponSeMassage(e.getMessage(),HttpStatus.BAD_REQUEST);
     }
+
+// Notes Validation. get Data from validation.class/notesValidation.method.
+
+    @ExceptionHandler(NotesValidationException.class)
+    public ResponseEntity<?> handleNotesValidationException(NotesValidationException e) {
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("status", HttpStatus.BAD_REQUEST.value());
+        response.put("type", "Notes");
+        response.put("message", e.getMessage());
+        response.put("errors", e.getError());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 }
